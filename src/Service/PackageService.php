@@ -171,14 +171,7 @@ interface PackageService
      *
      * @throws \Inspirum\Balikobot\Exception\Exception
      */
-    public function orderPickup(
-        string $carrier,
-        DateTimeInterface $dateFrom,
-        DateTimeInterface $dateTo,
-        float $weight,
-        int $packageCount,
-        ?string $message = null,
-    ): void;
+    public function orderPickup(string $carrier, DateTimeInterface $dateFrom, DateTimeInterface $dateTo, float $weight, int $packageCount, ?string $message = null): void;
 
     /**
      * Order shipments from place B (typically supplier / previous consignee) to place A (shipping point)

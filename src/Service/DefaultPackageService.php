@@ -28,15 +28,23 @@ use function sprintf;
 
 final class DefaultPackageService implements PackageService
 {
-    public function __construct(
-        private Client $client,
-        private PackageDataFactory $packageDataFactory,
-        private PackageFactory $packageFactory,
-        private OrderedShipmentFactory $orderedShipmentFactory,
-        private LabelFactory $labelFactory,
-        private ProofOfDeliveryFactory $proofOfDeliveryFactory,
-        private TransportCostFactory $transportCostFactory,
-    ) {
+    private Client $client;
+    private PackageDataFactory $packageDataFactory;
+    private PackageFactory $packageFactory;
+    private OrderedShipmentFactory $orderedShipmentFactory;
+    private LabelFactory $labelFactory;
+    private ProofOfDeliveryFactory $proofOfDeliveryFactory;
+    private TransportCostFactory $transportCostFactory;
+
+    public function __construct(Client $client, PackageDataFactory $packageDataFactory, PackageFactory $packageFactory, OrderedShipmentFactory $orderedShipmentFactory, LabelFactory $labelFactory, ProofOfDeliveryFactory $proofOfDeliveryFactory, TransportCostFactory $transportCostFactory)
+    {
+        $this->client                 = $client;
+        $this->packageDataFactory     = $packageDataFactory;
+        $this->packageFactory         = $packageFactory;
+        $this->orderedShipmentFactory = $orderedShipmentFactory;
+        $this->labelFactory           = $labelFactory;
+        $this->proofOfDeliveryFactory = $proofOfDeliveryFactory;
+        $this->transportCostFactory   = $transportCostFactory;
     }
 
     public function addPackages(PackageDataCollection $packages): PackageCollection
@@ -84,14 +92,14 @@ final class DefaultPackageService implements PackageService
 
     public function getOrder(string $carrier, string $orderId): OrderedShipment
     {
-        $response = $this->client->call(Version::V2V1, $carrier, Method::ORDER_VIEW, path: $orderId, shouldHaveStatus: false);
+        $response = $this->client->call(Version::V2V1, $carrier, Method::ORDER_VIEW, [], $orderId, false);
 
         return $this->orderedShipmentFactory->create($carrier, $response['package_ids'], $response);
     }
 
     public function getOverview(string $carrier): PackageCollection
     {
-        $response = $this->client->call(Version::V2V1, $carrier, Method::OVERVIEW, shouldHaveStatus: false);
+        $response = $this->client->call(Version::V2V1, $carrier, Method::OVERVIEW, [], null, false);
 
         return $this->packageFactory->createCollection($carrier, null, $response);
     }
@@ -120,20 +128,14 @@ final class DefaultPackageService implements PackageService
 
     public function getPackageInfoByPackageId(string $carrier, string $packageId): PackageData
     {
-        $response = $this->client->call(Version::V2V1, $carrier, Method::PACKAGE, path: $packageId, shouldHaveStatus: false);
+        $response = $this->client->call(Version::V2V1, $carrier, Method::PACKAGE, [], $packageId, false);
 
         return $this->packageDataFactory->create($response);
     }
 
     public function getPackageInfoByCarrierId(string $carrier, string $carrierId): PackageData
     {
-        $response = $this->client->call(
-            Version::V2V1,
-            $carrier,
-            Method::PACKAGE,
-            path: sprintf('carrier_id/%s', $carrierId),
-            shouldHaveStatus: false,
-        );
+        $response = $this->client->call(Version::V2V1, $carrier, Method::PACKAGE, [], sprintf('carrier_id/%s', $carrierId), false);
 
         return $this->packageDataFactory->create($response);
     }
@@ -162,13 +164,7 @@ final class DefaultPackageService implements PackageService
     /** @inheritDoc */
     public function getProofOfDeliveriesByCarrierIds(string $carrier, array $carrierIds): array
     {
-        $response = $this->client->call(
-            Version::V1V1,
-            $carrier,
-            Method::PROOF_OF_DELIVERY,
-            array_map(static fn(string $carrierId): array => ['id' => $carrierId], $carrierIds),
-            shouldHaveStatus: false,
-        );
+        $response = $this->client->call(Version::V1V1, $carrier, Method::PROOF_OF_DELIVERY, array_map(static fn(string $carrierId): array => ['id' => $carrierId], $carrierIds), null, false);
 
         return $this->proofOfDeliveryFactory->create($carrierIds, $response);
     }
@@ -187,14 +183,8 @@ final class DefaultPackageService implements PackageService
         return $this->packageFactory->createCollection($packages->getCarrier(), $packages->__toArray(), $response);
     }
 
-    public function orderPickup(
-        string $carrier,
-        DateTimeInterface $dateFrom,
-        DateTimeInterface $dateTo,
-        float $weight,
-        int $packageCount,
-        ?string $message = null,
-    ): void {
+    public function orderPickup(string $carrier, DateTimeInterface $dateFrom, DateTimeInterface $dateTo, float $weight, int $packageCount, ?string $message = null): void
+    {
         $response = $this->client->call(Version::V2V1, $carrier, Method::ORDER_PICKUP, [
             'date'          => $dateFrom->format('Y-m-d'),
             'time_from'     => $dateFrom->format('H:s'),
@@ -203,7 +193,6 @@ final class DefaultPackageService implements PackageService
             'package_count' => $packageCount,
             'message'       => $message,
         ]);
-
         if (array_key_exists('message', $response)) {
             throw new BadRequestException($response, 400, null, $response['message']);
         }

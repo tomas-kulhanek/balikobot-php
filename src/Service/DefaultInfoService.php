@@ -14,11 +14,15 @@ use Inspirum\Balikobot\Model\Changelog\ChangelogFactory;
 
 final class DefaultInfoService implements InfoService
 {
-    public function __construct(
-        private Client $client,
-        private AccountFactory $accountFactory,
-        private ChangelogFactory $changelogFactory,
-    ) {
+    private Client $client;
+    private AccountFactory $accountFactory;
+    private ChangelogFactory $changelogFactory;
+
+    public function __construct(Client $client, AccountFactory $accountFactory, ChangelogFactory $changelogFactory)
+    {
+        $this->client           = $client;
+        $this->accountFactory   = $accountFactory;
+        $this->changelogFactory = $changelogFactory;
     }
 
     public function getAccountInfo(): Account

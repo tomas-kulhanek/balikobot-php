@@ -13,24 +13,23 @@ use Inspirum\Balikobot\Model\Status\DefaultStatusCollection;
 use Inspirum\Balikobot\Model\Status\DefaultStatusFactory;
 use Inspirum\Balikobot\Model\Status\DefaultStatuses;
 use Inspirum\Balikobot\Model\Status\DefaultStatusesCollection;
-use Inspirum\Balikobot\Model\Status\Status;
-use Inspirum\Balikobot\Model\Status\StatusCollection;
-use Inspirum\Balikobot\Model\Status\StatusesCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultStatusFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string>       $carrierId
-     * @param array<string,mixed> $data
+     * @param array<string>                                                  $carrierId
+     * @param array<string,mixed>                                            $data
+     * @param \Inspirum\Balikobot\Model\Status\StatusesCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, array $carrierId, array $data, StatusesCollection|Throwable $result): void
+    public function testCreateCollection(string $carrier, array $carrierId, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 
@@ -317,15 +316,16 @@ final class DefaultStatusFactoryTest extends BaseTestCase
     }
 
     /**
-     * @param array<string>       $carrierId
-     * @param array<string,mixed> $data
+     * @param array<string>                                                $carrierId
+     * @param array<string,mixed>                                          $data
+     * @param \Inspirum\Balikobot\Model\Status\StatusCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateLastStatusCollection
      */
-    public function testCreateLastStatusCollection(string $carrier, array $carrierId, array $data, StatusCollection|Throwable $result): void
+    public function testCreateLastStatusCollection(string $carrier, array $carrierId, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 
@@ -456,14 +456,15 @@ final class DefaultStatusFactoryTest extends BaseTestCase
     }
 
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                $data
+     * @param \Inspirum\Balikobot\Model\Status\Status|\Throwable $result
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(string $carrier, string $carrierId, array $data, Status|Throwable $result): void
+    public function testCreate(string $carrier, string $carrierId, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 
@@ -542,14 +543,15 @@ final class DefaultStatusFactoryTest extends BaseTestCase
     }
 
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                $data
+     * @param \Inspirum\Balikobot\Model\Status\Status|\Throwable $result
      *
      * @dataProvider providesTestCreateLastStatus
      */
-    public function testCreateLastStatus(string $carrier, array $data, Status|Throwable $result): void
+    public function testCreateLastStatus(string $carrier, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

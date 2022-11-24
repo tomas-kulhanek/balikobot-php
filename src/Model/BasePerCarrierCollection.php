@@ -20,15 +20,15 @@ use function sprintf;
  */
 abstract class BasePerCarrierCollection extends BaseCollection implements PerCarrierCollection
 {
+    private ?string $carrier = null;
+
     /**
      * @param array<TKey,TValue> $items
      */
-    public function __construct(
-        private ?string $carrier = null,
-        array $items = [],
-    ) {
+    public function __construct(?string $carrier = null, array $items = [])
+    {
+        $this->carrier = $carrier;
         parent::__construct([]);
-
         foreach ($items as $key => $value) {
             $this->offsetSet($key, $value);
         }
@@ -39,7 +39,11 @@ abstract class BasePerCarrierCollection extends BaseCollection implements PerCar
      */
     public function getCarrier(): string
     {
-        return $this->carrier ?? throw new RuntimeException('Collection is empty');
+        if (!isset($this->carrier)) {
+            throw new RuntimeException('Collection is empty');
+        }
+
+        return $this->carrier;
     }
 
     /**
@@ -53,10 +57,10 @@ abstract class BasePerCarrierCollection extends BaseCollection implements PerCar
     }
 
     /**
-     * @param TKey   $key
-     * @param TValue $value
+     * @param mixed $key
+     * @param mixed $value
      */
-    public function offsetSet(mixed $key, mixed $value): void
+    public function offsetSet($key, $value): void
     {
         $this->validateCarrier($value);
 
@@ -64,9 +68,9 @@ abstract class BasePerCarrierCollection extends BaseCollection implements PerCar
     }
 
     /**
-     * @param TValue $value
+     * @param mixed $value
      */
-    public function offsetAdd(mixed $value): void
+    public function offsetAdd($value): void
     {
         $this->validateCarrier($value);
 
@@ -115,13 +119,7 @@ abstract class BasePerCarrierCollection extends BaseCollection implements PerCar
         }
 
         if ($this->carrier !== $item->getCarrier()) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Item carrier mismatch ("%s" instead "%s")',
-                    $item->getCarrier(),
-                    $this->carrier,
-                ),
-            );
+            throw new InvalidArgumentException(sprintf('Item carrier mismatch ("%s" instead "%s")', $item->getCarrier(), $this->carrier));
         }
     }
 }

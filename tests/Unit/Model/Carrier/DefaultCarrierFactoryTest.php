@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Inspirum\Balikobot\Tests\Unit\Model\Carrier;
 
-use Inspirum\Balikobot\Model\Carrier\Carrier;
-use Inspirum\Balikobot\Model\Carrier\CarrierCollection;
 use Inspirum\Balikobot\Model\Carrier\DefaultCarrier;
 use Inspirum\Balikobot\Model\Carrier\DefaultCarrierCollection;
 use Inspirum\Balikobot\Model\Carrier\DefaultCarrierFactory;
@@ -14,18 +12,20 @@ use Inspirum\Balikobot\Model\Method\DefaultMethodCollection;
 use Inspirum\Balikobot\Model\Method\DefaultMethodFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultCarrierFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                            $data
+     * @param \Inspirum\Balikobot\Model\Carrier\CarrierCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(array $data, CarrierCollection|Throwable $result): void
+    public function testCreateCollection(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 
@@ -80,14 +80,15 @@ final class DefaultCarrierFactoryTest extends BaseTestCase
     }
 
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                  $data
+     * @param \Inspirum\Balikobot\Model\Carrier\Carrier|\Throwable $result
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(string $carrier, array $data, Carrier|Throwable $result): void
+    public function testCreate(string $carrier, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

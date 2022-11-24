@@ -13,14 +13,21 @@ use function array_map;
  */
 final class DefaultCarrier extends BaseModel implements Carrier
 {
+    private string $code;
+    private string $name;
+    /**
+     * @var array<string, \Inspirum\Balikobot\Model\Method\MethodCollection>
+     */
+    private array $methods = [];
+
     /**
      * @param array<string,\Inspirum\Balikobot\Model\Method\MethodCollection> $methods
      */
-    public function __construct(
-        private string $code,
-        private string $name,
-        private array $methods = [],
-    ) {
+    public function __construct(string $code, string $name, array $methods = [])
+    {
+        $this->code    = $code;
+        $this->name    = $name;
+        $this->methods = $methods;
     }
 
     public function getCode(): string

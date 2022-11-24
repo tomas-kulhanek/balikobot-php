@@ -11,16 +11,25 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultZipCode extends BaseModel implements ZipCode
 {
-    public function __construct(
-        private string $carrier,
-        private ?string $service,
-        private ?string $zipCode,
-        private ?string $zipCodeEnd,
-        private ?string $city,
-        private ?string $region,
-        private ?string $country,
-        private bool $morningDelivery,
-    ) {
+    private string $carrier;
+    private ?string $service;
+    private ?string $zipCode;
+    private ?string $zipCodeEnd;
+    private ?string $city;
+    private ?string $region;
+    private ?string $country;
+    private bool $morningDelivery;
+
+    public function __construct(string $carrier, ?string $service, ?string $zipCode, ?string $zipCodeEnd, ?string $city, ?string $region, ?string $country, bool $morningDelivery)
+    {
+        $this->carrier         = $carrier;
+        $this->service         = $service;
+        $this->zipCode         = $zipCode;
+        $this->zipCodeEnd      = $zipCodeEnd;
+        $this->city            = $city;
+        $this->region          = $region;
+        $this->country         = $country;
+        $this->morningDelivery = $morningDelivery;
     }
 
     public function getCarrier(): string

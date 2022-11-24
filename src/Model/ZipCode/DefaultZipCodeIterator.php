@@ -12,14 +12,16 @@ use Traversable;
  */
 final class DefaultZipCodeIterator extends IteratorIterator implements ZipCodeIterator
 {
+    private string $carrier;
+    private ?string $service;
+
     /**
      * @param \Traversable<int,\Inspirum\Balikobot\Model\ZipCode\ZipCode> $iterator
      */
-    public function __construct(
-        private string $carrier,
-        private ?string $service,
-        Traversable $iterator,
-    ) {
+    public function __construct(string $carrier, ?string $service, Traversable $iterator)
+    {
+        $this->carrier = $carrier;
+        $this->service = $service;
         parent::__construct($iterator);
     }
 

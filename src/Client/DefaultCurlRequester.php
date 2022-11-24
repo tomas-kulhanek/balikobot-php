@@ -30,11 +30,15 @@ use const CURLOPT_URL;
 
 final class DefaultCurlRequester implements Requester
 {
-    public function __construct(
-        private string $apiUser,
-        private string $apiKey,
-        private bool $sslVerify = true,
-    ) {
+    private string $apiUser;
+    private string $apiKey;
+    private bool $sslVerify = true;
+
+    public function __construct(string $apiUser, string $apiKey, bool $sslVerify = true)
+    {
+        $this->apiUser   = $apiUser;
+        $this->apiKey    = $apiKey;
+        $this->sslVerify = $sslVerify;
     }
 
     /** @inheritDoc */

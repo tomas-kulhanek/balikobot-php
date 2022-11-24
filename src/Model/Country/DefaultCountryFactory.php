@@ -12,24 +12,16 @@ final class DefaultCountryFactory implements CountryFactory
     /** @inheritDoc */
     public function create(array $data): Country
     {
-        return new DefaultCountry(
-            [
-                'cs' => $data['name_cz'],
-                'en' => $data['name_en'],
-            ],
-            $data['iso_code'],
-            $data['currency'],
-            is_array($data['phone_prefix']) ? $data['phone_prefix'] : [$data['phone_prefix']],
-            $data['continent'],
-        );
+        return new DefaultCountry([
+            'cs' => $data['name_cz'],
+            'en' => $data['name_en'],
+        ], $data['iso_code'], $data['currency'], is_array($data['phone_prefix']) ? $data['phone_prefix'] : [$data['phone_prefix']], $data['continent']);
     }
 
     /** @inheritDoc */
     public function createCollection(array $data): CountryCollection
     {
-        return new DefaultCountryCollection(
-            array_map(fn(array $country): Country => $this->create($country), $data['countries'] ?? []),
-        );
+        return new DefaultCountryCollection(array_map(fn(array $country): Country => $this->create($country), $data['countries'] ?? []));
     }
 
     /** @inheritDoc */
@@ -43,11 +35,7 @@ final class DefaultCountryFactory implements CountryFactory
     {
         $codCountries = [];
         foreach ($data['cod_countries'] ?? [] as $countryCode => $country) {
-            $codCountries[] = new DefaultCodCountry(
-                $countryCode,
-                $country['currency'],
-                $country['max_price'],
-            );
+            $codCountries[] = new DefaultCodCountry($countryCode, $country['currency'], $country['max_price']);
         }
 
         return $codCountries;

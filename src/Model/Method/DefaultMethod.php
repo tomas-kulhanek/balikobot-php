@@ -11,9 +11,11 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultMethod extends BaseModel implements Method
 {
-    public function __construct(
-        private string $code,
-    ) {
+    private string $code;
+
+    public function __construct(string $code)
+    {
+        $this->code = $code;
     }
 
     public function getCode(): string

@@ -61,14 +61,5 @@ interface BranchService
      *
      * @throws \Inspirum\Balikobot\Exception\Exception
      */
-    public function getBranchesForLocation(
-        string $carrier,
-        string $country,
-        string $city,
-        ?string $zipCode = null,
-        ?string $street = null,
-        ?int $maxResults = null,
-        ?float $radius = null,
-        ?string $type = null,
-    ): BranchIterator;
+    public function getBranchesForLocation(string $carrier, string $country, string $city, ?string $zipCode = null, ?string $street = null, ?int $maxResults = null, ?float $radius = null, ?string $type = null): BranchIterator;
 }

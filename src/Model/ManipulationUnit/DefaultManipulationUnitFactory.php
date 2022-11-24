@@ -17,9 +17,6 @@ final class DefaultManipulationUnitFactory implements ManipulationUnitFactory
     /** @inheritDoc */
     public function createCollection(string $carrier, array $data): ManipulationUnitCollection
     {
-        return new DefaultManipulationUnitCollection(
-            $carrier,
-            array_map(fn(array $unit): ManipulationUnit => $this->create($unit), $data['units'] ?? []),
-        );
+        return new DefaultManipulationUnitCollection($carrier, array_map(fn(array $unit): ManipulationUnit => $this->create($unit), $data['units'] ?? []));
     }
 }

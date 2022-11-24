@@ -83,6 +83,6 @@ final class DefaultServiceTest extends BaseTestCase
         self::assertSame($options, $model->getOptions());
         self::assertSame($countries, $model->getCountries());
         self::assertSame($codCountries, $model->getCodCountries());
-        self::assertSame($expectedArray, $model->__toArray());
+        self::assertSame($expectedArray, $model->toArray());
     }
 }

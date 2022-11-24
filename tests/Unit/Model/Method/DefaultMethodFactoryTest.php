@@ -7,21 +7,22 @@ namespace Inspirum\Balikobot\Tests\Unit\Model\Method;
 use Inspirum\Balikobot\Model\Method\DefaultMethod;
 use Inspirum\Balikobot\Model\Method\DefaultMethodCollection;
 use Inspirum\Balikobot\Model\Method\DefaultMethodFactory;
-use Inspirum\Balikobot\Model\Method\MethodCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultMethodFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                          $data
+     * @param \Inspirum\Balikobot\Model\Method\MethodCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(array $data, MethodCollection|Throwable $result): void
+    public function testCreateCollection(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

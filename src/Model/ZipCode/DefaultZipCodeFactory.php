@@ -11,16 +11,7 @@ final class DefaultZipCodeFactory implements ZipCodeFactory
     /** @inheritDoc */
     public function create(string $carrier, ?string $service, array $data): ZipCode
     {
-        return new DefaultZipCode(
-            $carrier,
-            $service,
-            $data['zip'] ?? ($data['zip_start'] ?? null),
-            $data['zip_end'] ?? null,
-            $data['city'] ?? null,
-            $data['region'] ?? null,
-            $data['country'] ?? null,
-            (bool) ($data['1B'] ?? false),
-        );
+        return new DefaultZipCode($carrier, $service, $data['zip'] ?? ($data['zip_start'] ?? null), $data['zip_end'] ?? null, $data['city'] ?? null, $data['region'] ?? null, $data['country'] ?? null, (bool) ($data['1B'] ?? false));
     }
 
     /** @inheritDoc */

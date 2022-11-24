@@ -11,21 +11,35 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultPackage extends BaseModel implements Package
 {
+    private string $carrier;
+    private string $packageId;
+    private string $batchId;
+    private string $carrierId;
+    private ?string $trackUrl      = null;
+    private ?string $labelUrl      = null;
+    private ?string $carrierIdSwap = null;
+    /**
+     * @var array<string>
+     */
+    private array $pieces           = [];
+    private ?string $finalCarrierId = null;
+    private ?string $finalTrackUrl  = null;
+
     /**
      * @param array<string> $pieces
      */
-    public function __construct(
-        private string $carrier,
-        private string $packageId,
-        private string $batchId,
-        private string $carrierId,
-        private ?string $trackUrl = null,
-        private ?string $labelUrl = null,
-        private ?string $carrierIdSwap = null,
-        private array $pieces = [],
-        private ?string $finalCarrierId = null,
-        private ?string $finalTrackUrl = null,
-    ) {
+    public function __construct(string $carrier, string $packageId, string $batchId, string $carrierId, ?string $trackUrl = null, ?string $labelUrl = null, ?string $carrierIdSwap = null, array $pieces = [], ?string $finalCarrierId = null, ?string $finalTrackUrl = null)
+    {
+        $this->carrier        = $carrier;
+        $this->packageId      = $packageId;
+        $this->batchId        = $batchId;
+        $this->carrierId      = $carrierId;
+        $this->trackUrl       = $trackUrl;
+        $this->labelUrl       = $labelUrl;
+        $this->carrierIdSwap  = $carrierIdSwap;
+        $this->pieces         = $pieces;
+        $this->finalCarrierId = $finalCarrierId;
+        $this->finalTrackUrl  = $finalTrackUrl;
     }
 
     public function getPackageId(): string

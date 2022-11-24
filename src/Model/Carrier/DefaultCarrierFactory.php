@@ -11,9 +11,11 @@ use function array_map;
 
 final class DefaultCarrierFactory implements CarrierFactory
 {
-    public function __construct(
-        private MethodFactory $methodFactory,
-    ) {
+    private MethodFactory $methodFactory;
+
+    public function __construct(MethodFactory $methodFactory)
+    {
+        $this->methodFactory = $methodFactory;
     }
 
     /** @inheritDoc */
@@ -28,8 +30,6 @@ final class DefaultCarrierFactory implements CarrierFactory
     /** @inheritDoc */
     public function createCollection(array $data): CarrierCollection
     {
-        return new DefaultCarrierCollection(
-            array_map(fn(array $carrier): Carrier => $this->create($carrier['slug'], $carrier), $data['carriers']),
-        );
+        return new DefaultCarrierCollection(array_map(fn(array $carrier): Carrier => $this->create($carrier['slug'], $carrier), $data['carriers']));
     }
 }

@@ -11,22 +11,23 @@ use Inspirum\Balikobot\Model\TransportCost\DefaultTransportCost;
 use Inspirum\Balikobot\Model\TransportCost\DefaultTransportCostCollection;
 use Inspirum\Balikobot\Model\TransportCost\DefaultTransportCostFactory;
 use Inspirum\Balikobot\Model\TransportCost\DefaultTransportCostPart;
-use Inspirum\Balikobot\Model\TransportCost\TransportCostCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultTransportCostFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<array<string,mixed>>|null $packages
-     * @param array<string,mixed>             $data
+     * @param array<array<string,mixed>>|null                                            $packages
+     * @param array<string,mixed>                                                        $data
+     * @param \Inspirum\Balikobot\Model\TransportCost\TransportCostCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, ?array $packages, array $data, TransportCostCollection|Throwable $result): void
+    public function testCreateCollection(string $carrier, ?array $packages, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

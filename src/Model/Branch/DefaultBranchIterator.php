@@ -12,16 +12,22 @@ use Traversable;
  */
 final class DefaultBranchIterator extends IteratorIterator implements BranchIterator
 {
+    private ?string $carrier;
+    private ?string $service;
+    /**
+     * @var array<string>
+     */
+    private ?array $countries;
+
     /**
      * @param array<string>                                             $countries
      * @param \Traversable<int,\Inspirum\Balikobot\Model\Branch\Branch> $iterator
      */
-    public function __construct(
-        private ?string $carrier,
-        private ?string $service,
-        private ?array $countries,
-        Traversable $iterator,
-    ) {
+    public function __construct(?string $carrier, ?string $service, ?array $countries, Traversable $iterator)
+    {
+        $this->carrier   = $carrier;
+        $this->service   = $service;
+        $this->countries = $countries;
         parent::__construct($iterator);
     }
 

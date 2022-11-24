@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inspirum\Balikobot\Tests\Unit\Model\Changelog;
 
 use DateTimeImmutable;
-use Inspirum\Balikobot\Model\Changelog\ChangelogCollection;
 use Inspirum\Balikobot\Model\Changelog\DefaultChangelog;
 use Inspirum\Balikobot\Model\Changelog\DefaultChangelogCollection;
 use Inspirum\Balikobot\Model\Changelog\DefaultChangelogFactory;
@@ -13,18 +12,20 @@ use Inspirum\Balikobot\Model\Changelog\DefaultChangelogStatus;
 use Inspirum\Balikobot\Model\Changelog\DefaultChangelogStatusCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultChangelogFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                                $data
+     * @param \Inspirum\Balikobot\Model\Changelog\ChangelogCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(array $data, ChangelogCollection|Throwable $result): void
+    public function testCreateCollection(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

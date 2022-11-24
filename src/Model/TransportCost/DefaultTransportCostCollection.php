@@ -13,19 +13,24 @@ use function array_map;
  */
 final class DefaultTransportCostCollection extends BaseCollection implements TransportCostCollection
 {
+    private ?string $carrier;
+
     /**
      * @param array<int,\Inspirum\Balikobot\Model\TransportCost\TransportCost> $items
      */
-    public function __construct(
-        private ?string $carrier,
-        array $items = [],
-    ) {
+    public function __construct(?string $carrier, array $items = [])
+    {
+        $this->carrier = $carrier;
         parent::__construct($items);
     }
 
     public function getCarrier(): string
     {
-        return $this->carrier ?? throw new RuntimeException('Collection is empty');
+        if (!isset($this->carrier)) {
+            throw new RuntimeException('Collection is empty');
+        }
+
+        return $this->carrier;
     }
 
     /** @inheritDoc */

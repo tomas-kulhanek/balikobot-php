@@ -20,11 +20,7 @@ final class DefaultServiceCollectionTest extends BaseTestCase
             new DefaultService(
                 'NP',
                 'NP - Balík Na poštu',
-                countries: [
-                    'CZ',
-                    'EU',
-                ],
-                options: new DefaultServiceOptionCollection([
+                new DefaultServiceOptionCollection([
                     new DefaultServiceOption(
                         '3',
                         'Dodejka',
@@ -34,11 +30,17 @@ final class DefaultServiceCollectionTest extends BaseTestCase
                         'Dobírka Pk A/MZ dobírka',
                     ),
                 ]),
+                [
+                    'CZ',
+                    'EU',
+                ],
             ),
             new DefaultService(
                 'RR',
                 'RR - Doporučená zásilka Ekonomická',
-                codCountries: [
+                null,
+                null,
+                [
                     new DefaultCodCountry(
                         'UA',
                         'UAH',
@@ -60,9 +62,9 @@ final class DefaultServiceCollectionTest extends BaseTestCase
         );
         $expectedArray = [
             [
-                'type'         => 'NP',
-                'name'         => 'NP - Balík Na poštu',
-                'options'      => [
+                'type' => 'NP',
+                'name' => 'NP - Balík Na poštu',
+                'options' => [
                     [
                         'code' => '3',
                         'name' => 'Dodejka',
@@ -72,27 +74,27 @@ final class DefaultServiceCollectionTest extends BaseTestCase
                         'name' => 'Dobírka Pk A/MZ dobírka',
                     ],
                 ],
-                'countries'    => [
+                'countries' => [
                     'CZ',
                     'EU',
                 ],
                 'codCountries' => null,
             ],
             [
-                'type'         => 'RR',
-                'name'         => 'RR - Doporučená zásilka Ekonomická',
-                'options'      => null,
-                'countries'    => null,
+                'type' => 'RR',
+                'name' => 'RR - Doporučená zásilka Ekonomická',
+                'options' => null,
+                'countries' => null,
                 'codCountries' => [
                     [
-                        'code'         => 'UA',
+                        'code' => 'UA',
                         'currencyCode' => 'UAH',
-                        'maxPrice'     => 36000.0,
+                        'maxPrice' => 36000.0,
                     ],
                     [
-                        'code'         => 'LV',
+                        'code' => 'LV',
                         'currencyCode' => 'USD',
-                        'maxPrice'     => 2000.0,
+                        'maxPrice' => 2000.0,
                     ],
                 ],
             ],

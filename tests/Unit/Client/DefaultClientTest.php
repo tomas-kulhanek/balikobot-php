@@ -14,6 +14,7 @@ use Inspirum\Balikobot\Exception\Exception;
 use Inspirum\Balikobot\Exception\UnauthorizedException;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 use function gzcompress;
 use function is_array;
 use function json_encode;
@@ -35,7 +36,7 @@ final class DefaultClientTest extends BaseTestCase
     ): void {
         $client = $this->newDefaultClient(200, [], [$url, $data]);
 
-        $client->call($version, $carrier, $request, $data, $path, shouldHaveStatus: false);
+        $client->call($version, $carrier, $request, $data, $path, false);
     }
 
     /**
@@ -103,19 +104,27 @@ final class DefaultClientTest extends BaseTestCase
      */
     public function testCall(
         int $statusCode,
-        array|string $response,
+        $response,
         bool $shouldHaveStatus,
-        Throwable|array|bool $result,
+        $result,
         bool $gzip = false,
     ): void {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 
         $client = $this->newDefaultClient($statusCode, $response);
 
-        $actualResponse = $client->call(Version::V1V1, Carrier::CP, Method::ADD, shouldHaveStatus: $shouldHaveStatus, gzip: $gzip);
+        $actualResponse = $client->call(
+            Version::V1V1,
+            Carrier::CP,
+            Method::ADD,
+            [],
+            null,
+            $shouldHaveStatus,
+            $gzip,
+        );
 
         if ($result === true) {
             self::assertSame($response, $actualResponse);
@@ -199,7 +208,7 @@ final class DefaultClientTest extends BaseTestCase
                 'test'   => 1596,
             ])),
             'shouldHaveStatus' => true,
-            'result'           => new BadRequestException([], 400, message: 'Cannot parse response data'),
+            'result'           => new BadRequestException([], 400, null, 'Cannot parse response data'),
             'gzip'             => false,
         ];
 
@@ -223,8 +232,8 @@ final class DefaultClientTest extends BaseTestCase
     }
 
     /**
-     * @param array<mixed,mixed>          $response
-     * @param array<array<string,string>> $errors
+     * @param array<mixed,mixed>               $response
+     * @param array<array<string,string>>|null $errors
      *
      * @dataProvider providerCallException()
      */
@@ -232,14 +241,14 @@ final class DefaultClientTest extends BaseTestCase
         int $statusCode,
         array $response,
         Exception $result,
-        array|null $errors = null,
+        ?array $errors = null
     ): void {
         $client = $this->newDefaultClient($statusCode, $response);
 
         try {
             $client->call(Version::V1V1, Carrier::CP, Method::ADD);
         } catch (Exception $exception) {
-            self::assertInstanceOf($result::class, $exception);
+            self::assertInstanceOf(get_class($result), $exception);
             self::assertSame($result->getStatusCode(), $exception->getStatusCode());
             if ($result->getMessage() !== '') {
                 self::assertSame($result->getMessage(), $exception->getMessage());
@@ -267,7 +276,7 @@ final class DefaultClientTest extends BaseTestCase
         yield 'status_error_403' => [
             'statusCode' => 403,
             'response'   => [],
-            'result'     => new UnauthorizedException(statusCode: 403),
+            'result'     => new UnauthorizedException(null, 403),
         ];
 
         yield 'status_code_match' => [
@@ -311,7 +320,7 @@ final class DefaultClientTest extends BaseTestCase
                     ],
                 ],
             ],
-            'result'     => new BadRequestException([], 400, message: ''),
+            'result'     => new BadRequestException([], 400, null, ''),
             'errors'     => [
                 0 => [
                     'status'   => 'Špatný formát dat.',
@@ -338,7 +347,7 @@ final class DefaultClientTest extends BaseTestCase
                     'aa' => 406,
                 ],
             ],
-            'result'     => new BadRequestException([], 400, message: ''),
+            'result'     => new BadRequestException([], 400, null, ''),
             'errors'     => [
                 0 => [
                     'status'   => 'Špatný formát dat.',
@@ -368,7 +377,8 @@ final class DefaultClientTest extends BaseTestCase
             'result'     => new BadRequestException(
                 [],
                 400,
-                message: 'Operace neproběhla v pořádku, zkontrolujte konkrétní data.' . "\n" .
+                null,
+                'Operace neproběhla v pořádku, zkontrolujte konkrétní data.' . "\n" .
                 '[0][status]: Špatný formát dat.' . "\n" .
                 '[0][id]: Nespecifikovaná chyba.' . "\n" .
                 '[0][rec_name]: Nedorazilo jméno příjemce.' . "\n" .
@@ -386,7 +396,7 @@ final class DefaultClientTest extends BaseTestCase
                     ],
                 ],
             ],
-            'result'     => new BadRequestException([], 400, message: ''),
+            'result'     => new BadRequestException([], 400, null, ''),
             'errors'     => [
                 0 => [
                     'status' => 'Nedorazila žádná data ke zpracování nebo nemůžou být akceptována.',
@@ -408,7 +418,7 @@ final class DefaultClientTest extends BaseTestCase
                     1 => 'test',
                 ],
             ],
-            'result'     => new BadRequestException([], 400, message: ''),
+            'result'     => new BadRequestException([], 400, null, ''),
             'errors'     => [
                 0 => [
                     'eid' => 'Eshop ID je delší než je maximální povolená délka.',
@@ -449,7 +459,7 @@ final class DefaultClientTest extends BaseTestCase
                     ],
                 ],
             ],
-            'result'     => new BadRequestException([], 400, message: ''),
+            'result'     => new BadRequestException([], 400, null, ''),
             'errors'     => [
                 0 => [
                     'rec_zip' => 'Nepovolené PSČ příjemce.',
@@ -466,7 +476,7 @@ final class DefaultClientTest extends BaseTestCase
      * @param array<mixed>|string $response
      * @param array<mixed>|null   $request
      */
-    private function newDefaultClient(int $statusCode, array|string $response, ?array $request = null): DefaultClient
+    private function newDefaultClient(int $statusCode, $response, ?array $request = null): DefaultClient
     {
         $requester = $this->newRequester($statusCode, $response, $request);
         $validator = new Validator();

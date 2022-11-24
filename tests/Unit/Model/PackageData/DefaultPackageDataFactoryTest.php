@@ -6,21 +6,22 @@ namespace Inspirum\Balikobot\Tests\Unit\Model\PackageData;
 
 use Inspirum\Balikobot\Model\PackageData\DefaultPackageData;
 use Inspirum\Balikobot\Model\PackageData\DefaultPackageDataFactory;
-use Inspirum\Balikobot\Model\PackageData\PackageData;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultPackageDataFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                          $data
+     * @param \Inspirum\Balikobot\Model\PackageData\PackageData|\Throwable $result
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(array $data, PackageData|Throwable $result): void
+    public function testCreate(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

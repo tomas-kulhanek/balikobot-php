@@ -11,10 +11,13 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultChangelogStatus extends BaseModel implements ChangelogStatus
 {
-    public function __construct(
-        private string $name,
-        private string $description,
-    ) {
+    private string $name;
+    private string $description;
+
+    public function __construct(string $name, string $description)
+    {
+        $this->name        = $name;
+        $this->description = $description;
     }
 
     public function getName(): string

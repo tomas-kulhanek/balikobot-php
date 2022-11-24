@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Inspirum\Balikobot\Tests\Unit\Model\Country;
 
-use Inspirum\Balikobot\Model\Country\CountryCollection;
 use Inspirum\Balikobot\Model\Country\DefaultCountry;
 use Inspirum\Balikobot\Model\Country\DefaultCountryCollection;
 use Inspirum\Balikobot\Model\Country\DefaultCountryFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultCountryFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                            $data
+     * @param \Inspirum\Balikobot\Model\Country\CountryCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(array $data, CountryCollection|Throwable $result): void
+    public function testCreateCollection(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

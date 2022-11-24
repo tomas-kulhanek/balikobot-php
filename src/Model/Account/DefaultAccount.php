@@ -12,19 +12,31 @@ use Inspirum\Balikobot\Model\Carrier\CarrierCollection;
  */
 final class DefaultAccount extends BaseModel implements Account
 {
-    public function __construct(
-        private string $name,
-        private string $contactPerson,
-        private string $email,
-        private string $phone,
-        private string $url,
-        private string $street,
-        private string $city,
-        private string $zip,
-        private string $country,
-        private bool $live,
-        private CarrierCollection $carriers,
-    ) {
+    private string $name;
+    private string $contactPerson;
+    private string $email;
+    private string $phone;
+    private string $url;
+    private string $street;
+    private string $city;
+    private string $zip;
+    private string $country;
+    private bool $live;
+    private CarrierCollection $carriers;
+
+    public function __construct(string $name, string $contactPerson, string $email, string $phone, string $url, string $street, string $city, string $zip, string $country, bool $live, CarrierCollection $carriers)
+    {
+        $this->name          = $name;
+        $this->contactPerson = $contactPerson;
+        $this->email         = $email;
+        $this->phone         = $phone;
+        $this->url           = $url;
+        $this->street        = $street;
+        $this->city          = $city;
+        $this->zip           = $zip;
+        $this->country       = $country;
+        $this->live          = $live;
+        $this->carriers      = $carriers;
     }
 
     public function getName(): string

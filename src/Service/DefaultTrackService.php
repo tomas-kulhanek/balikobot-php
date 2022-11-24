@@ -18,10 +18,13 @@ use OutOfBoundsException;
 
 final class DefaultTrackService implements TrackService
 {
-    public function __construct(
-        private Client $client,
-        private StatusFactory $statusFactory,
-    ) {
+    private Client $client;
+    private StatusFactory $statusFactory;
+
+    public function __construct(Client $client, StatusFactory $statusFactory)
+    {
+        $this->client        = $client;
+        $this->statusFactory = $statusFactory;
     }
 
     public function trackPackage(Package $package): Statuses
@@ -31,7 +34,11 @@ final class DefaultTrackService implements TrackService
 
     public function trackPackageById(string $carrier, string $carrierId): Statuses
     {
-        return $this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId) ?? throw new OutOfBoundsException();
+        if (!isset($this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId))) {
+            throw new OutOfBoundsException();
+        }
+
+        return $this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
     }
 
     public function trackPackages(PackageCollection $packages): StatusesCollection
@@ -42,13 +49,7 @@ final class DefaultTrackService implements TrackService
     /** @inheritDoc */
     public function trackPackagesByIds(string $carrier, array $carrierIds): StatusesCollection
     {
-        $response = $this->client->call(
-            Version::V2V2,
-            $carrier,
-            Method::TRACK,
-            ['carrier_ids' => $carrierIds],
-            shouldHaveStatus: false,
-        );
+        $response = $this->client->call(Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => $carrierIds], null, false);
 
         return $this->statusFactory->createCollection($carrier, $carrierIds, $response);
     }
@@ -60,7 +61,11 @@ final class DefaultTrackService implements TrackService
 
     public function trackPackageLastStatusById(string $carrier, string $carrierId): Status
     {
-        return $this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId) ?? throw new OutOfBoundsException();
+        if (!isset($this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId))) {
+            throw new OutOfBoundsException();
+        }
+
+        return $this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
     }
 
     public function trackPackagesLastStatuses(PackageCollection $packages): StatusCollection
@@ -71,13 +76,7 @@ final class DefaultTrackService implements TrackService
     /** @inheritDoc */
     public function trackPackagesLastStatusesByIds(string $carrier, array $carrierIds): StatusCollection
     {
-        $response = $this->client->call(
-            Version::V2V2,
-            $carrier,
-            Method::TRACK_STATUS,
-            ['carrier_ids' => $carrierIds],
-            shouldHaveStatus: false,
-        );
+        $response = $this->client->call(Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => $carrierIds], null, false);
 
         return $this->statusFactory->createLastStatusCollection($carrier, $carrierIds, $response);
     }

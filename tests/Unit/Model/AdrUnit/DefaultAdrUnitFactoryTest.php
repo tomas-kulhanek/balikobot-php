@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Inspirum\Balikobot\Tests\Unit\Model\AdrUnit;
 
-use Inspirum\Balikobot\Model\AdrUnit\AdrUnitCollection;
 use Inspirum\Balikobot\Model\AdrUnit\DefaultAdrUnit;
 use Inspirum\Balikobot\Model\AdrUnit\DefaultAdrUnitCollection;
 use Inspirum\Balikobot\Model\AdrUnit\DefaultAdrUnitFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultAdrUnitFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                            $data
+     * @param \Inspirum\Balikobot\Model\AdrUnit\AdrUnitCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, array $data, AdrUnitCollection|Throwable $result): void
+    public function testCreateCollection(string $carrier, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

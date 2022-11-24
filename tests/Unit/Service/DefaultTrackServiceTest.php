@@ -29,8 +29,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         $expectedResult = $this->createMock(StatusesCollection::class);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => $carrierIds], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => $carrierIds], null, false], $response),
+            $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
         );
 
         $actualResult = $trackService->trackPackagesByIds($carrier, $carrierIds);
@@ -38,8 +38,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         self::assertSame($expectedResult, $actualResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => $carrierIds], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => $carrierIds], null, false], $response),
+            $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
         );
 
         $actualResult = $trackService->trackPackages(new DefaultPackageCollection($carrier, array_map(static fn(string $carrierId): Package => new DefaultPackage(
@@ -62,8 +62,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         $expectedResultCollection->expects(self::exactly(2))->method('getForCarrierId')->with($carrierId)->willReturn($expectedResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => [$carrierId]], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => [$carrierId]], null, false], $response),
+            $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
         );
 
         $actualResult = $trackService->trackPackageById($carrier, $carrierId);
@@ -71,8 +71,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         self::assertSame($expectedResult, $actualResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => [$carrierId]], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK, ['carrier_ids' => [$carrierId]], null, false], $response),
+            $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
         );
 
         $actualResult = $trackService->trackPackage(new DefaultPackage(
@@ -93,8 +93,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         $expectedResult = $this->createMock(StatusCollection::class);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => $carrierIds], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => $carrierIds], null, false], $response),
+            $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
         );
 
         $actualResult = $trackService->trackPackagesLastStatusesByIds($carrier, $carrierIds);
@@ -102,8 +102,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         self::assertSame($expectedResult, $actualResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => $carrierIds], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => $carrierIds], null, false], $response),
+            $this->mockStatusFactory($carrier, $carrierIds, $response, $expectedResult),
         );
 
         $actualResult = $trackService->trackPackagesLastStatuses(new DefaultPackageCollection($carrier, array_map(static fn(string $carrierId): Package => new DefaultPackage(
@@ -126,8 +126,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         $expectedResultCollection->expects(self::exactly(2))->method('getForCarrierId')->with($carrierId)->willReturn($expectedResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => [$carrierId]], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => [$carrierId]], null, false], $response),
+            $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
         );
 
         $actualResult = $trackService->trackPackageLastStatusById($carrier, $carrierId);
@@ -135,8 +135,8 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
         self::assertSame($expectedResult, $actualResult);
 
         $trackService = $this->newDefaultTrackService(
-            client: $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => [$carrierId]], null, false], $response),
-            statusFactory: $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
+            $this->mockClient([Version::V2V2, $carrier, Method::TRACK_STATUS, ['carrier_ids' => [$carrierId]], null, false], $response),
+            $this->mockStatusFactory($carrier, [$carrierId], $response, $expectedResultCollection),
         );
 
         $actualResult = $trackService->trackPackageLastStatus(new DefaultPackage(
@@ -150,10 +150,11 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
     }
 
     /**
-     * @param array<string>       $carrierIds
-     * @param array<string,mixed> $data
+     * @param array<string>                                                                                         $carrierIds
+     * @param array<string,mixed>                                                                                   $data
+     * @param \Inspirum\Balikobot\Model\Status\StatusesCollection|\Inspirum\Balikobot\Model\Status\StatusCollection $response
      */
-    private function mockStatusFactory(string $carrier, array $carrierIds, array $data, StatusesCollection|StatusCollection $response): StatusFactory
+    private function mockStatusFactory(string $carrier, array $carrierIds, array $data, $response): StatusFactory
     {
         $statusFactory = $this->createMock(StatusFactory::class);
         $statusFactory->expects(self::once())

@@ -11,19 +11,12 @@ final class DefaultAttributeFactory implements AttributeFactory
     /** @inheritDoc */
     public function create(array $data): Attribute
     {
-        return new DefaultAttribute(
-            $data['name'],
-            $data['data_type'],
-            (string) $data['max_length'],
-        );
+        return new DefaultAttribute($data['name'], $data['data_type'], (string) $data['max_length']);
     }
 
     /** @inheritDoc */
     public function createCollection(string $carrier, array $data): AttributeCollection
     {
-        return new DefaultAttributeCollection(
-            $carrier,
-            array_map(fn(array $attribute): Attribute => $this->create($attribute), $data['attributes'] ?? []),
-        );
+        return new DefaultAttributeCollection($carrier, array_map(fn(array $attribute): Attribute => $this->create($attribute), $data['attributes'] ?? []));
     }
 }

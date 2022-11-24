@@ -7,21 +7,22 @@ namespace Inspirum\Balikobot\Tests\Unit\Model\ManipulationUnit;
 use Inspirum\Balikobot\Model\ManipulationUnit\DefaultManipulationUnit;
 use Inspirum\Balikobot\Model\ManipulationUnit\DefaultManipulationUnitCollection;
 use Inspirum\Balikobot\Model\ManipulationUnit\DefaultManipulationUnitFactory;
-use Inspirum\Balikobot\Model\ManipulationUnit\ManipulationUnitCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultManipulationUnitFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                                              $data
+     * @param \Inspirum\Balikobot\Model\ManipulationUnit\ManipulationUnitCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, array $data, ManipulationUnitCollection|Throwable $result): void
+    public function testCreateCollection(string $carrier, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

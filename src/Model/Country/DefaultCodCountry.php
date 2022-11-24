@@ -11,11 +11,15 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultCodCountry extends BaseModel implements CodCountry
 {
-    public function __construct(
-        private string $code,
-        private string $currencyCode,
-        private float $maxPrice,
-    ) {
+    private string $code;
+    private string $currencyCode;
+    private float $maxPrice;
+
+    public function __construct(string $code, string $currencyCode, float $maxPrice)
+    {
+        $this->code         = $code;
+        $this->currencyCode = $currencyCode;
+        $this->maxPrice     = $maxPrice;
     }
 
     public function getCode(): string

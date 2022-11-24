@@ -10,22 +10,23 @@ use Inspirum\Balikobot\Exception\BadRequestException;
 use Inspirum\Balikobot\Model\Package\DefaultPackage;
 use Inspirum\Balikobot\Model\Package\DefaultPackageCollection;
 use Inspirum\Balikobot\Model\Package\DefaultPackageFactory;
-use Inspirum\Balikobot\Model\Package\PackageCollection;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultPackageFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<array<string,mixed>>|null $packages
-     * @param array<string,mixed>             $data
+     * @param array<array<string,mixed>>|null                                $packages
+     * @param array<string,mixed>                                            $data
+     * @param \Inspirum\Balikobot\Model\Package\PackageCollection|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, ?array $packages, array $data, PackageCollection|Throwable $result): void
+    public function testCreateCollection(string $carrier, ?array $packages, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

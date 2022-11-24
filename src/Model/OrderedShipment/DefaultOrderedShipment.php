@@ -11,17 +11,27 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultOrderedShipment extends BaseModel implements OrderedShipment
 {
+    private string $orderId;
+    private string $carrier;
+    /**
+     * @var array<string>
+     */
+    private array $packageIds;
+    private string $handoverUrl;
+    private string $labelsUrl;
+    private ?string $fileUrl = null;
+
     /**
      * @param array<string> $packageIds
      */
-    public function __construct(
-        private string $orderId,
-        private string $carrier,
-        private array $packageIds,
-        private string $handoverUrl,
-        private string $labelsUrl,
-        private ?string $fileUrl = null,
-    ) {
+    public function __construct(string $orderId, string $carrier, array $packageIds, string $handoverUrl, string $labelsUrl, ?string $fileUrl = null)
+    {
+        $this->orderId     = $orderId;
+        $this->carrier     = $carrier;
+        $this->packageIds  = $packageIds;
+        $this->handoverUrl = $handoverUrl;
+        $this->labelsUrl   = $labelsUrl;
+        $this->fileUrl     = $fileUrl;
     }
 
     public function getOrderId(): string

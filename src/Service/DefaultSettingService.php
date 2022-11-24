@@ -27,16 +27,25 @@ use function sprintf;
 
 final class DefaultSettingService implements SettingService
 {
-    public function __construct(
-        private Client $client,
-        private CarrierFactory $carrierFactory,
-        private ServiceFactory $serviceFactory,
-        private ManipulationUnitFactory $unitFactory,
-        private CountryFactory $countryFactory,
-        private ZipCodeFactory $zipCodeFactory,
-        private AdrUnitFactory $adrUnitFactory,
-        private AttributeFactory $attributeFactory,
-    ) {
+    private Client $client;
+    private CarrierFactory $carrierFactory;
+    private ServiceFactory $serviceFactory;
+    private ManipulationUnitFactory $unitFactory;
+    private CountryFactory $countryFactory;
+    private ZipCodeFactory $zipCodeFactory;
+    private AdrUnitFactory $adrUnitFactory;
+    private AttributeFactory $attributeFactory;
+
+    public function __construct(Client $client, CarrierFactory $carrierFactory, ServiceFactory $serviceFactory, ManipulationUnitFactory $unitFactory, CountryFactory $countryFactory, ZipCodeFactory $zipCodeFactory, AdrUnitFactory $adrUnitFactory, AttributeFactory $attributeFactory)
+    {
+        $this->client           = $client;
+        $this->carrierFactory   = $carrierFactory;
+        $this->serviceFactory   = $serviceFactory;
+        $this->unitFactory      = $unitFactory;
+        $this->countryFactory   = $countryFactory;
+        $this->zipCodeFactory   = $zipCodeFactory;
+        $this->adrUnitFactory   = $adrUnitFactory;
+        $this->attributeFactory = $attributeFactory;
     }
 
     public function getCarriers(): CarrierCollection
@@ -48,7 +57,7 @@ final class DefaultSettingService implements SettingService
 
     public function getCarrier(string $carrier): Carrier
     {
-        $response = $this->client->call(Version::V2V1, null, Method::INFO_CARRIERS, path: $carrier);
+        $response = $this->client->call(Version::V2V1, null, Method::INFO_CARRIERS, [], $carrier);
 
         return $this->carrierFactory->create($carrier, $response);
     }
@@ -112,7 +121,7 @@ final class DefaultSettingService implements SettingService
     /** @inheritDoc */
     public function getZipCodes(string $carrier, string $service, ?string $country = null): ZipCodeIterator
     {
-        $response = $this->client->call(Version::V2V1, $carrier, Method::ZIP_CODES, path: sprintf('%s/%s', $service, $country));
+        $response = $this->client->call(Version::V2V1, $carrier, Method::ZIP_CODES, [], sprintf('%s/%s', $service, $country));
 
         return $this->zipCodeFactory->createIterator($carrier, $service, $country, $response);
     }
@@ -140,7 +149,7 @@ final class DefaultSettingService implements SettingService
 
     public function getAddServiceOptionsForService(string $carrier, string $service): Service
     {
-        $response = $this->client->call(Version::V2V1, $carrier, Method::ADD_SERVICE_OPTIONS, path: $service);
+        $response = $this->client->call(Version::V2V1, $carrier, Method::ADD_SERVICE_OPTIONS, [], $service);
 
         return $this->serviceFactory->create($carrier, $response);
     }

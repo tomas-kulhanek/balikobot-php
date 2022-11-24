@@ -42,18 +42,12 @@ abstract class BaseException extends RuntimeException implements Exception
      * @param \Throwable|null $previous
      * @param string|null     $message
      */
-    public function __construct(
-        array $response = [],
-        int $statusCode = 500,
-        ?Throwable $previous = null,
-        ?string $message = null,
-    ) {
+    public function __construct(array $response = [], int $statusCode = 500, ?Throwable $previous = null, ?string $message = null)
+    {
         // set response data
         $this->response = $response;
-
         // overwrite default HTTP status code
         $this->statusCode = $statusCode;
-
         // overwrite default message
         if ($message === null) {
             $message = Response::STATUS_CODE_ERRORS[$statusCode] ?? 'Operace neproběhla v pořádku.';

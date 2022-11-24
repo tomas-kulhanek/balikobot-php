@@ -12,16 +12,25 @@ use function array_map;
  */
 final class DefaultTransportCost extends BaseModel implements TransportCost
 {
+    private string $batchId;
+    private string $carrier;
+    private float $totalCost;
+    private string $currencyCode;
+    /**
+     * @var array<\Inspirum\Balikobot\Model\TransportCost\TransportCostPart>
+     */
+    private array $costsBreakdown = [];
+
     /**
      * @param array<\Inspirum\Balikobot\Model\TransportCost\TransportCostPart> $costsBreakdown
      */
-    public function __construct(
-        private string $batchId,
-        private string $carrier,
-        private float $totalCost,
-        private string $currencyCode,
-        private array $costsBreakdown = [],
-    ) {
+    public function __construct(string $batchId, string $carrier, float $totalCost, string $currencyCode, array $costsBreakdown = [])
+    {
+        $this->batchId        = $batchId;
+        $this->carrier        = $carrier;
+        $this->totalCost      = $totalCost;
+        $this->currencyCode   = $currencyCode;
+        $this->costsBreakdown = $costsBreakdown;
     }
 
     public function getBatchId(): string

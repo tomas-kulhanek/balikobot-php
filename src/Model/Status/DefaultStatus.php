@@ -12,15 +12,30 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultStatus extends BaseModel implements Status
 {
+    private string $carrier;
+    private string $carrierId;
+    private float $id;
+    private string $name;
+    private string $description;
+    private string $type;
+    private ?DateTimeInterface $date;
+
     public function __construct(
-        private string $carrier,
-        private string $carrierId,
-        private float $id,
-        private string $name,
-        private string $description,
-        private string $type,
-        private ?DateTimeInterface $date,
+        string $carrier,
+        string $carrierId,
+        float $id,
+        string $name,
+        string $description,
+        string $type,
+        ?DateTimeInterface $date,
     ) {
+        $this->date        = $date;
+        $this->type        = $type;
+        $this->description = $description;
+        $this->name        = $name;
+        $this->id          = $id;
+        $this->carrierId   = $carrierId;
+        $this->carrier     = $carrier;
     }
 
     public function getCarrier(): string
@@ -68,7 +83,7 @@ final class DefaultStatus extends BaseModel implements Status
             'name'        => $this->name,
             'description' => $this->description,
             'type'        => $this->type,
-            'date'        => $this->date?->format(DateTimeInterface::ATOM),
+            'date' => $this->date instanceof DateTimeInterface ? $this->date->format(DateTimeInterface::ATOM) : null,
         ];
     }
 }

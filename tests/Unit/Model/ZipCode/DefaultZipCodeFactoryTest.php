@@ -11,23 +11,24 @@ use Inspirum\Balikobot\Definitions\Service;
 use Inspirum\Balikobot\Model\ZipCode\DefaultZipCode;
 use Inspirum\Balikobot\Model\ZipCode\DefaultZipCodeFactory;
 use Inspirum\Balikobot\Model\ZipCode\DefaultZipCodeIterator;
-use Inspirum\Balikobot\Model\ZipCode\ZipCodeIterator;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
 use Traversable;
+use function get_class;
 use function iterator_to_array;
 
 final class DefaultZipCodeFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                          $data
+     * @param \Inspirum\Balikobot\Model\ZipCode\ZipCodeIterator|\Throwable $result
      *
      * @dataProvider providesTestCreateIterator
      */
-    public function testCreateIterator(string $carrier, string $service, ?string $country, array $data, ZipCodeIterator|Throwable $result): void
+    public function testCreateIterator(string $carrier, string $service, ?string $country, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

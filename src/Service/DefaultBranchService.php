@@ -19,13 +19,19 @@ use function in_array;
 
 final class DefaultBranchService implements BranchService
 {
-    public function __construct(
-        private Client $client,
-        private BranchFactory $branchFactory,
-        private BranchResolver $branchResolver,
-        private CarrierProvider $carrierProvider,
-        private ServiceProvider $serviceProvider,
-    ) {
+    private Client $client;
+    private BranchFactory $branchFactory;
+    private BranchResolver $branchResolver;
+    private CarrierProvider $carrierProvider;
+    private ServiceProvider $serviceProvider;
+
+    public function __construct(Client $client, BranchFactory $branchFactory, BranchResolver $branchResolver, CarrierProvider $carrierProvider, ServiceProvider $serviceProvider)
+    {
+        $this->client          = $client;
+        $this->branchFactory   = $branchFactory;
+        $this->branchResolver  = $branchResolver;
+        $this->carrierProvider = $carrierProvider;
+        $this->serviceProvider = $serviceProvider;
     }
 
     /** @inheritDoc */
@@ -176,38 +182,23 @@ final class DefaultBranchService implements BranchService
             $paths[] = $country;
         }
 
-        $response = $this->client->call(Version::V2V1, $carrier, $usedRequest, path: implode('/', $paths), gzip: true);
+        $response = $this->client->call(Version::V2V1, $carrier, $usedRequest, [], implode('/', $paths), true, true);
 
         return $this->branchFactory->createIterator($carrier, $service, $country !== null ? [$country] : null, $response);
     }
 
     /** @inheritDoc */
-    public function getBranchesForLocation(
-        string $carrier,
-        string $country,
-        string $city,
-        ?string $zipCode = null,
-        ?string $street = null,
-        ?int $maxResults = null,
-        ?float $radius = null,
-        ?string $type = null,
-    ): BranchIterator {
-        $response = $this->client->call(
-            Version::V2V1,
-            $carrier,
-            Method::BRANCH_LOCATOR,
-            array_filter(
-                [
-                    'country'     => $country,
-                    'city'        => $city,
-                    'zip'         => $zipCode,
-                    'street'      => $street,
-                    'max_results' => $maxResults,
-                    'radius'      => $radius,
-                    'type'        => $type,
-                ],
-            ),
-        );
+    public function getBranchesForLocation(string $carrier, string $country, string $city, ?string $zipCode = null, ?string $street = null, ?int $maxResults = null, ?float $radius = null, ?string $type = null): BranchIterator
+    {
+        $response = $this->client->call(Version::V2V1, $carrier, Method::BRANCH_LOCATOR, array_filter([
+            'country'     => $country,
+            'city'        => $city,
+            'zip'         => $zipCode,
+            'street'      => $street,
+            'max_results' => $maxResults,
+            'radius'      => $radius,
+            'type'        => $type,
+        ]));
 
         return $this->branchFactory->createIterator($carrier, null, [$country], $response);
     }

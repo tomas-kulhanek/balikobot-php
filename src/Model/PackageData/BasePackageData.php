@@ -6,6 +6,7 @@ namespace Inspirum\Balikobot\Model\PackageData;
 
 use Inspirum\Arrayable\BaseModel;
 use Inspirum\Balikobot\Model\PackageData\Package\CommonData;
+use ReturnTypeWillChange;
 use function array_key_exists;
 use function count;
 
@@ -17,11 +18,16 @@ abstract class BasePackageData extends BaseModel implements PackageData
     use CommonData;
 
     /**
+     * @var array<string, mixed>
+     */
+    private array $data = [];
+
+    /**
      * @param array<string,mixed> $data
      */
-    public function __construct(
-        private array $data = [],
-    ) {
+    public function __construct(array $data = [])
+    {
+        $this->data = $data;
     }
 
     /** @inheritDoc */
@@ -30,22 +36,38 @@ abstract class BasePackageData extends BaseModel implements PackageData
         return $this->data;
     }
 
-    public function offsetExists(mixed $key): bool
+    /**
+     * @param mixed $key
+     */
+    public function offsetExists($key): bool
     {
         return array_key_exists($key, $this->data);
     }
 
-    public function offsetGet(mixed $key): mixed
+    /**
+     * @param mixed $key
+     *
+     * @return mixed
+     */
+    #[ReturnTypeWillChange]
+    public function offsetGet($key)
     {
         return $this->data[$key];
     }
 
-    public function offsetSet(mixed $key, mixed $value): void
+    /**
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function offsetSet($key, $value): void
     {
         $this->data[$key] = $value;
     }
 
-    public function offsetUnset(mixed $key): void
+    /**
+     * @param mixed $key
+     */
+    public function offsetUnset($key): void
     {
         unset($this->data[$key]);
     }

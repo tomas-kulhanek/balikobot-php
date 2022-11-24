@@ -15,13 +15,5 @@ interface Client
      *
      * @throws \Inspirum\Balikobot\Exception\Exception
      */
-    public function call(
-        string $baseUrl,
-        ?string $carrier,
-        string $method,
-        array $data = [],
-        ?string $path = null,
-        bool $shouldHaveStatus = true,
-        bool $gzip = false,
-    ): array;
+    public function call(string $baseUrl, ?string $carrier, string $method, array $data = [], ?string $path = null, bool $shouldHaveStatus = true, bool $gzip = false): array;
 }

@@ -6,7 +6,6 @@ namespace Inspirum\Balikobot\Client\Response;
 
 use Inspirum\Balikobot\Exception\BadRequestException;
 use Inspirum\Balikobot\Exception\UnauthorizedException;
-use function array_is_list;
 use function count;
 use function max;
 
@@ -40,11 +39,8 @@ final class Validator
      *
      * @throws \Inspirum\Balikobot\Exception\Exception
      */
-    public function validateResponseStatus(
-        array $responseItem,
-        ?array $response = null,
-        bool $shouldHaveStatus = true,
-    ): void {
+    public function validateResponseStatus(array $responseItem, ?array $response = null, bool $shouldHaveStatus = true): void
+    {
         if ($shouldHaveStatus === false && isset($responseItem['status']) === false) {
             return;
         }
@@ -78,7 +74,23 @@ final class Validator
      */
     public function validateIndexes(array $response, int $count): void
     {
-        if (array_is_list($response) === false || count($response) !== $count) {
+        $arrayIsList = static function (array $array): bool {
+            if ($array === []) {
+                return true;
+            }
+
+            $currentKey = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $currentKey) {
+                    return false;
+                }
+
+                ++$currentKey;
+            }
+
+            return true;
+        };
+        if ($arrayIsList($response) === false || count($response) !== $count) {
             throw new BadRequestException($response);
         }
     }

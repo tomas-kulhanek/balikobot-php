@@ -13,11 +13,15 @@ use function sprintf;
  */
 final class DefaultStatuses extends BaseModel implements Statuses
 {
-    public function __construct(
-        private string $carrier,
-        private string $carrierId,
-        private StatusCollection $states,
-    ) {
+    private string $carrier;
+    private string $carrierId;
+    private StatusCollection $states;
+
+    public function __construct(string $carrier, string $carrierId, StatusCollection $states)
+    {
+        $this->carrier   = $carrier;
+        $this->carrierId = $carrierId;
+        $this->states    = $states;
         foreach ($states as $status) {
             $this->validateCarrierId($status);
         }
@@ -29,13 +33,7 @@ final class DefaultStatuses extends BaseModel implements Statuses
     private function validateCarrierId(Status $item): void
     {
         if ($this->carrierId !== $item->getCarrierId()) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Item carrier ID mismatch ("%s" instead "%s")',
-                    $item->getCarrierId(),
-                    $this->carrierId,
-                ),
-            );
+            throw new InvalidArgumentException(sprintf('Item carrier ID mismatch ("%s" instead "%s")', $item->getCarrierId(), $this->carrierId));
         }
     }
 

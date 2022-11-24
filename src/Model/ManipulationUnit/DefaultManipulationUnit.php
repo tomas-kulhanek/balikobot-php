@@ -11,10 +11,13 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultManipulationUnit extends BaseModel implements ManipulationUnit
 {
-    public function __construct(
-        private string $code,
-        private string $name,
-    ) {
+    private string $code;
+    private string $name;
+
+    public function __construct(string $code, string $name)
+    {
+        $this->code = $code;
+        $this->name = $name;
     }
 
     public function getCode(): string

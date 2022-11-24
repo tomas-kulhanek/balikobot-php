@@ -90,7 +90,7 @@ final class DefaultSettingServiceTest extends BaseTestCase
         $countries = $settingService->getCodCountries(Carrier::CP);
 
         self::assertGreaterThanOrEqual(1, $countries->count());
-        self::assertNotNull($countries[0]?->getCodCountries());
+        self::assertNotNull(empty($countries[0]) ? null : $countries[0]->getCodCountries());
     }
 
     public function testGetCountries(): void
@@ -100,7 +100,7 @@ final class DefaultSettingServiceTest extends BaseTestCase
         $countries = $settingService->getCountries(Carrier::CP);
 
         self::assertGreaterThanOrEqual(1, $countries->count());
-        self::assertNotNull($countries[0]?->getCountries());
+        self::assertNotNull(empty($countries[0]) ? null : $countries[0]->getCountries());
     }
 
     public function testGetCountriesData(): void
@@ -148,7 +148,7 @@ final class DefaultSettingServiceTest extends BaseTestCase
         $services = $settingService->getAddServiceOptions(Carrier::CP);
 
         self::assertGreaterThanOrEqual(1, $services->count());
-        self::assertNotNull($services[0]?->getOptions());
+        self::assertNotNull(empty($services[0]) ? null : $services[0]->getOptions());
     }
 
     public function testGetAddServiceOptionsForService(): void

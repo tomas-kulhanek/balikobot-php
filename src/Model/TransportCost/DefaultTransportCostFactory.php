@@ -11,21 +11,17 @@ use function count;
 
 final class DefaultTransportCostFactory implements TransportCostFactory
 {
-    public function __construct(
-        private Validator $validator,
-    ) {
+    private Validator $validator;
+
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 
     /** @inheritDoc */
     public function create(string $carrier, array $data): TransportCost
     {
-        return new DefaultTransportCost(
-            $data['eid'],
-            $carrier,
-            $data['costs_total'],
-            $data['currency'],
-            array_map(static fn(array $part) => new DefaultTransportCostPart($part['name'], $part['cost'], $data['currency']), $data['costs_breakdown'] ?? []),
-        );
+        return new DefaultTransportCost($data['eid'], $carrier, $data['costs_total'], $data['currency'], array_map(static fn(array $part) => new DefaultTransportCostPart($part['name'], $part['cost'], $data['currency']), $data['costs_breakdown'] ?? []));
     }
 
     /** @inheritDoc */

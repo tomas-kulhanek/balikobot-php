@@ -11,13 +11,14 @@ use Inspirum\Arrayable\BaseCollection;
  */
 final class DefaultManipulationUnitCollection extends BaseCollection implements ManipulationUnitCollection
 {
+    private string $carrier;
+
     /**
      * @param array<int,\Inspirum\Balikobot\Model\ManipulationUnit\ManipulationUnit> $items
      */
-    public function __construct(
-        private string $carrier,
-        array $items = [],
-    ) {
+    public function __construct(string $carrier, array $items = [])
+    {
+        $this->carrier = $carrier;
         parent::__construct($items);
     }
 

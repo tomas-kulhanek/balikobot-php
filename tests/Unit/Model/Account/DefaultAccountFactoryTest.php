@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Inspirum\Balikobot\Tests\Unit\Model\Account;
 
-use Inspirum\Balikobot\Model\Account\Account;
 use Inspirum\Balikobot\Model\Account\DefaultAccount;
 use Inspirum\Balikobot\Model\Account\DefaultAccountFactory;
 use Inspirum\Balikobot\Model\Carrier\DefaultCarrier;
@@ -13,18 +12,20 @@ use Inspirum\Balikobot\Model\Carrier\DefaultCarrierFactory;
 use Inspirum\Balikobot\Model\Method\DefaultMethodFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultAccountFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string,mixed> $data
+     * @param array<string,mixed>                                  $data
+     * @param \Inspirum\Balikobot\Model\Account\Account|\Throwable $result
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(array $data, Account|Throwable $result): void
+    public function testCreate(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

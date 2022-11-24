@@ -7,22 +7,23 @@ namespace Inspirum\Balikobot\Tests\Unit\Model\OrderedShipment;
 use Inspirum\Balikobot\Definitions\Carrier;
 use Inspirum\Balikobot\Model\OrderedShipment\DefaultOrderedShipment;
 use Inspirum\Balikobot\Model\OrderedShipment\DefaultOrderedShipmentFactory;
-use Inspirum\Balikobot\Model\OrderedShipment\OrderedShipment;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultOrderedShipmentFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string>       $packageIds
-     * @param array<string,mixed> $data
+     * @param array<string>                                                        $packageIds
+     * @param array<string,mixed>                                                  $data
+     * @param \Inspirum\Balikobot\Model\OrderedShipment\OrderedShipment|\Throwable $result
      *
      * @dataProvider providesTestCreateCollection
      */
-    public function testCreateCollection(string $carrier, array $packageIds, array $data, OrderedShipment|Throwable $result): void
+    public function testCreateCollection(string $carrier, array $packageIds, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

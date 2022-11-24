@@ -12,16 +12,28 @@ use Inspirum\Arrayable\BaseModel;
 final class DefaultCountry extends BaseModel implements Country
 {
     /**
+     * @var array<string, string>
+     */
+    private array $names;
+    private string $code;
+    private string $currencyCode;
+    /**
+     * @var array<string>
+     */
+    private array $phonePrefixes;
+    private string $continent;
+
+    /**
      * @param array<string,string> $names
      * @param array<string>        $phonePrefixes
      */
-    public function __construct(
-        private array $names,
-        private string $code,
-        private string $currencyCode,
-        private array $phonePrefixes,
-        private string $continent,
-    ) {
+    public function __construct(array $names, string $code, string $currencyCode, array $phonePrefixes, string $continent)
+    {
+        $this->names         = $names;
+        $this->code          = $code;
+        $this->currencyCode  = $currencyCode;
+        $this->phonePrefixes = $phonePrefixes;
+        $this->continent     = $continent;
     }
 
     /** @inheritDoc */

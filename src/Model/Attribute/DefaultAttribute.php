@@ -11,11 +11,15 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultAttribute extends BaseModel implements Attribute
 {
-    public function __construct(
-        private string $name,
-        private string $dataType,
-        private ?string $maxLength,
-    ) {
+    private string $name;
+    private string $dataType;
+    private ?string $maxLength;
+
+    public function __construct(string $name, string $dataType, ?string $maxLength)
+    {
+        $this->name      = $name;
+        $this->dataType  = $dataType;
+        $this->maxLength = $maxLength;
     }
 
     public function getName(): string

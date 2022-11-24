@@ -18,7 +18,7 @@ abstract class BaseServiceTestCase extends BaseTestCase
      */
     protected function mockClientResponse(): array
     {
-        return ['data' => uniqid(more_entropy: true)];
+        return ['data' => uniqid('', true)];
     }
 
     /**

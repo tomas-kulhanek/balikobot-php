@@ -12,15 +12,22 @@ use function array_map;
  */
 final class DefaultServiceCollection extends BaseCollection implements ServiceCollection
 {
+    private string $carrier;
+    private ?bool $parcel = null;
+    private ?bool $cargo  = null;
+
     /**
      * @param array<int,\Inspirum\Balikobot\Model\Service\Service> $items
      */
     public function __construct(
-        private readonly string $carrier,
+        string $carrier,
         array $items = [],
-        private readonly ?bool $parcel = null,
-        private readonly ?bool $cargo = null,
+        ?bool $parcel = null,
+        ?bool $cargo = null,
     ) {
+        $this->cargo   = $cargo;
+        $this->parcel  = $parcel;
+        $this->carrier = $carrier;
         parent::__construct($items);
     }
 

@@ -10,26 +10,17 @@ use function count;
 
 final class DefaultPackageFactory implements PackageFactory
 {
-    public function __construct(
-        private Validator $validator,
-    ) {
+    private Validator $validator;
+
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 
     /** @inheritDoc */
     public function create(string $carrier, array $data): Package
     {
-        return new DefaultPackage(
-            $carrier,
-            (string) $data['package_id'],
-            $data['eid'],
-            (string) ($data['carrier_id'] ?? ''),
-            $data['track_url'] ?? null,
-            $data['label_url'] ?? null,
-            $data['carrier_id_swap'] ?? null,
-            $data['pieces'] ?? [],
-            $data['carrier_id_final'] ?? null,
-            $data['track_url_final'] ?? null,
-        );
+        return new DefaultPackage($carrier, (string) $data['package_id'], $data['eid'], (string) ($data['carrier_id'] ?? ''), $data['track_url'] ?? null, $data['label_url'] ?? null, $data['carrier_id_swap'] ?? null, $data['pieces'] ?? [], $data['carrier_id_final'] ?? null, $data['track_url_final'] ?? null);
     }
 
     /** @inheritDoc */
@@ -40,10 +31,7 @@ final class DefaultPackageFactory implements PackageFactory
             $this->validator->validateIndexes($packagesResponse, count($packages));
         }
 
-        $orderedPackages = new DefaultPackageCollection(
-            $carrier,
-            labelsUrl: $data['labels_url'] ?? null,
-        );
+        $orderedPackages = new DefaultPackageCollection($carrier, [], $data['labels_url'] ?? null);
 
         foreach ($packagesResponse as $i => $package) {
             $this->validator->validateResponseStatus($package, $data, false);

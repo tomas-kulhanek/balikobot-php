@@ -11,11 +11,15 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultTransportCostPart extends BaseModel implements TransportCostPart
 {
-    public function __construct(
-        private string $name,
-        private float $cost,
-        private string $currencyCode,
-    ) {
+    private string $name;
+    private float $cost;
+    private string $currencyCode;
+
+    public function __construct(string $name, float $cost, string $currencyCode)
+    {
+        $this->name         = $name;
+        $this->cost         = $cost;
+        $this->currencyCode = $currencyCode;
     }
 
     public function getName(): string

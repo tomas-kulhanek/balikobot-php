@@ -21,8 +21,8 @@ final class DefaultInfoServiceTest extends BaseServiceTestCase
         $expectedResult = $this->createMock(Account::class);
 
         $infoService = $this->newDefaultInfoService(
-            client: $this->mockClient([Version::V2V1, null, Method::INFO_WHO_AM_I], $response),
-            accountFactory: $this->mockAccountFactory($response, $expectedResult),
+            $this->mockClient([Version::V2V1, null, Method::INFO_WHO_AM_I], $response),
+            $this->mockAccountFactory($response, $expectedResult),
         );
 
         $actualResult = $infoService->getAccountInfo();
@@ -36,8 +36,9 @@ final class DefaultInfoServiceTest extends BaseServiceTestCase
         $expectedResult = $this->createMock(ChangelogCollection::class);
 
         $infoService = $this->newDefaultInfoService(
-            client: $this->mockClient([Version::V2V1, null, Method::CHANGELOG], $response),
-            changelogFactory: $this->mockChangelogFactory($response, $expectedResult),
+            $this->mockClient([Version::V2V1, null, Method::CHANGELOG], $response),
+            null,
+            $this->mockChangelogFactory($response, $expectedResult),
         );
 
         $actualResult = $infoService->getChangelog();

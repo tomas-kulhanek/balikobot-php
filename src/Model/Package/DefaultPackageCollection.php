@@ -12,14 +12,14 @@ use function array_map;
  */
 final class DefaultPackageCollection extends BasePerCarrierCollection implements PackageCollection
 {
+    private ?string $labelsUrl = null;
+
     /**
      * @param array<\Inspirum\Balikobot\Model\Package\Package> $items
      */
-    public function __construct(
-        ?string $carrier = null,
-        array $items = [],
-        private ?string $labelsUrl = null,
-    ) {
+    public function __construct(?string $carrier = null, array $items = [], ?string $labelsUrl = null)
+    {
+        $this->labelsUrl = $labelsUrl;
         parent::__construct($carrier, $items);
     }
 

@@ -7,18 +7,20 @@ namespace Inspirum\Balikobot\Tests\Unit\Model\Label;
 use Inspirum\Balikobot\Model\Label\DefaultLabelFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultLabelFactoryTest extends BaseTestCase
 {
     /**
      * @param array<string,mixed> $data
+     * @param string|\Throwable   $result
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(array $data, string|Throwable $result): void
+    public function testCreate(array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

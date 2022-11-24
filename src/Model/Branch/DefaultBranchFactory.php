@@ -19,42 +19,7 @@ final class DefaultBranchFactory implements BranchFactory
     {
         $data = $this->normalizeData($carrier, $service, $data);
 
-        return new DefaultBranch(
-            $carrier,
-            $service,
-            $data['branch_id'],
-            $data['id'],
-            $data['branch_uid'] ?? null,
-            $data['type'],
-            $data['name'],
-            $data['city'],
-            $data['street'],
-            $data['zip'],
-            $data['country'] ?? null,
-            $data['city_part'] ?? null,
-            $data['district'] ?? null,
-            $data['region'] ?? null,
-            $data['currency'] ?? null,
-            $data['photo_small'] ?? null,
-            $data['photo_big'] ?? null,
-            $data['url'] ?? null,
-            $data['latitude'] ?? null,
-            $data['longitude'] ?? null,
-            $data['directions_global'] ?? null,
-            $data['directions_car'] ?? null,
-            $data['directions_public'] ?? null,
-            $data['wheelchair_accessible'] ?? null,
-            $data['claim_assistant'] ?? null,
-            $data['dressing_room'] ?? null,
-            $data['opening_monday'] ?? null,
-            $data['opening_tuesday'] ?? null,
-            $data['opening_wednesday'] ?? null,
-            $data['opening_thursday'] ?? null,
-            $data['opening_friday'] ?? null,
-            $data['opening_saturday'] ?? null,
-            $data['opening_sunday'] ?? null,
-            $data['max_weight'] ?? null,
-        );
+        return new DefaultBranch($carrier, $service, $data['branch_id'], $data['id'], $data['branch_uid'] ?? null, $data['type'], $data['name'], $data['city'], $data['street'], $data['zip'], $data['country'] ?? null, $data['city_part'] ?? null, $data['district'] ?? null, $data['region'] ?? null, $data['currency'] ?? null, $data['photo_small'] ?? null, $data['photo_big'] ?? null, $data['url'] ?? null, $data['latitude'] ?? null, $data['longitude'] ?? null, $data['directions_global'] ?? null, $data['directions_car'] ?? null, $data['directions_public'] ?? null, $data['wheelchair_accessible'] ?? null, $data['claim_assistant'] ?? null, $data['dressing_room'] ?? null, $data['opening_monday'] ?? null, $data['opening_tuesday'] ?? null, $data['opening_wednesday'] ?? null, $data['opening_thursday'] ?? null, $data['opening_friday'] ?? null, $data['opening_saturday'] ?? null, $data['opening_sunday'] ?? null, $data['max_weight'] ?? null);
     }
 
     /** @inheritDoc */
@@ -167,14 +132,7 @@ final class DefaultBranchFactory implements BranchFactory
         if (isset($data['street']) && (isset($data['house_number']) || isset($data['orientation_number']))) {
             $houseNumber       = (int) ($data['house_number'] ?? 0);
             $orientationNumber = (int) ($data['orientation_number'] ?? 0);
-            $streetNumber      = trim(
-                sprintf(
-                    '%s/%s',
-                    $houseNumber > 0 ? $houseNumber : '',
-                    $orientationNumber > 0 ? $orientationNumber : '',
-                ),
-                '/',
-            );
+            $streetNumber      = trim(sprintf('%s/%s', $houseNumber > 0 ? $houseNumber : '', $orientationNumber > 0 ? $orientationNumber : ''), '/');
 
             $data['street'] = trim(sprintf('%s %s', $data['street'] ?: ($data['city'] ?? ''), $streetNumber));
         }

@@ -15,15 +15,15 @@ use function uniqid;
  */
 final class DefaultPackageDataCollection extends BaseCollection implements PackageDataCollection
 {
+    private string $carrier;
+
     /**
      * @param array<\Inspirum\Balikobot\Model\PackageData\PackageData> $items
      */
-    public function __construct(
-        private string $carrier,
-        array $items = [],
-    ) {
+    public function __construct(string $carrier, array $items = [])
+    {
+        $this->carrier = $carrier;
         parent::__construct([]);
-
         foreach ($items as $package) {
             $this->add($package);
         }
@@ -45,14 +45,23 @@ final class DefaultPackageDataCollection extends BaseCollection implements Packa
         $this->offsetAdd($item);
     }
 
-    /** @inheritDoc */
-    public function offsetSet(mixed $key, mixed $value): void
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @inheritDoc
+     */
+    public function offsetSet($key, $value): void
     {
         parent::offsetSet($key, $this->clonePackageWithEid($value));
     }
 
-    /** @inheritDoc */
-    public function offsetAdd(mixed $value): void
+    /**
+     * @param mixed $value
+     *
+     * @inheritDoc
+     */
+    public function offsetAdd($value): void
     {
         parent::offsetAdd($this->clonePackageWithEid($value));
     }

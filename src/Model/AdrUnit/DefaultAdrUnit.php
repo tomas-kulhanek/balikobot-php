@@ -11,16 +11,25 @@ use Inspirum\Arrayable\BaseModel;
  */
 final class DefaultAdrUnit extends BaseModel implements AdrUnit
 {
-    public function __construct(
-        private string $carrier,
-        private string $id,
-        private string $code,
-        private string $name,
-        private string $class,
-        private ?string $packaging,
-        private ?string $tunnelCode,
-        private string $transportCategory,
-    ) {
+    private string $carrier;
+    private string $id;
+    private string $code;
+    private string $name;
+    private string $class;
+    private ?string $packaging;
+    private ?string $tunnelCode;
+    private string $transportCategory;
+
+    public function __construct(string $carrier, string $id, string $code, string $name, string $class, ?string $packaging, ?string $tunnelCode, string $transportCategory)
+    {
+        $this->carrier           = $carrier;
+        $this->id                = $id;
+        $this->code              = $code;
+        $this->name              = $name;
+        $this->class             = $class;
+        $this->packaging         = $packaging;
+        $this->tunnelCode        = $tunnelCode;
+        $this->transportCategory = $transportCategory;
     }
 
     public function getCarrier(): string

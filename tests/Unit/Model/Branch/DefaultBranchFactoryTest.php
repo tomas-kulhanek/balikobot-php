@@ -15,20 +15,22 @@ use Inspirum\Balikobot\Model\Branch\DefaultBranchIterator;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
 use Traversable;
+use function get_class;
 use function iterator_to_array;
 
 final class DefaultBranchFactoryTest extends BaseTestCase
 {
     /**
-     * @param array<string>       $countries
-     * @param array<string,mixed> $data
+     * @param array<string>                                              $countries
+     * @param array<string,mixed>                                        $data
+     * @param \Inspirum\Balikobot\Model\Branch\BranchIterator|\Throwable $result
      *
      * @dataProvider providesTestCreateIterator
      */
-    public function testCreateIterator(string $carrier, ?string $service, ?array $countries, array $data, BranchIterator|Throwable $result): void
+    public function testCreateIterator(string $carrier, ?string $service, ?array $countries, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

@@ -6,7 +6,6 @@ namespace Inspirum\Balikobot\Tests\Unit;
 
 use GuzzleHttp\Psr7\Response;
 use Inspirum\Balikobot\Client\Requester;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use function is_array;
 use function json_encode;
@@ -22,7 +21,7 @@ abstract class BaseTestCase extends TestCase
      *
      * @return \Inspirum\Balikobot\Client\Requester&\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function newRequester(int $statusCode, array|string $response, ?array $request = null): Requester&MockObject
+    protected function newRequester(int $statusCode, $response, ?array $request = null)
     {
         $requester = $this->createMock(Requester::class);
 

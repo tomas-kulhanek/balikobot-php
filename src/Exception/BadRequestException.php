@@ -19,14 +19,9 @@ final class BadRequestException extends BaseException
      * @param \Throwable|null $previous
      * @param string|null     $message
      */
-    public function __construct(
-        array $response,
-        int $statusCode = 400,
-        ?Throwable $previous = null,
-        ?string $message = null,
-    ) {
+    public function __construct(array $response, int $statusCode = 400, ?Throwable $previous = null, ?string $message = null)
+    {
         $this->setErrors($response);
-
         parent::__construct($response, $statusCode, $previous, $message);
     }
 

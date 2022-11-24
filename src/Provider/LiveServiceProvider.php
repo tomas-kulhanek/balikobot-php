@@ -10,9 +10,11 @@ use function array_map;
 
 final class LiveServiceProvider implements ServiceProvider
 {
-    public function __construct(
-        private SettingService $settingService,
-    ) {
+    private SettingService $settingService;
+
+    public function __construct(SettingService $settingService)
+    {
+        $this->settingService = $settingService;
     }
 
     /** @inheritDoc */

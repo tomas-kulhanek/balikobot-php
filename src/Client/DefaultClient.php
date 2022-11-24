@@ -7,41 +7,32 @@ namespace Inspirum\Balikobot\Client;
 use GuzzleHttp\Psr7\InflateStream;
 use Inspirum\Balikobot\Client\Response\Validator;
 use Inspirum\Balikobot\Exception\BadRequestException;
-use JsonException;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
 use function json_decode;
 use function sprintf;
 use function str_replace;
 use function trim;
-use const JSON_THROW_ON_ERROR;
 
 final class DefaultClient implements Client
 {
-    public function __construct(
-        private Requester $requester,
-        private Validator $validator,
-    ) {
+    private Requester $requester;
+    private Validator $validator;
+
+    public function __construct(Requester $requester, Validator $validator)
+    {
+        $this->requester = $requester;
+        $this->validator = $validator;
     }
 
     /** @inheritDoc */
-    public function call(
-        string $baseUrl,
-        ?string $carrier,
-        string $method,
-        array $data = [],
-        ?string $path = null,
-        bool $shouldHaveStatus = true,
-        bool $gzip = false,
-    ): array {
-        $url = $this->resolveUrl($baseUrl, $carrier, $method, $path, $gzip);
-
-        $response = $this->requester->request($url, $data);
-
+    public function call(string $baseUrl, ?string $carrier, string $method, array $data = [], ?string $path = null, bool $shouldHaveStatus = true, bool $gzip = false): array
+    {
+        $url           = $this->resolveUrl($baseUrl, $carrier, $method, $path, $gzip);
+        $response      = $this->requester->request($url, $data);
         $statusCode    = $response->getStatusCode();
         $contents      = $this->getContents($response->getBody(), $gzip);
         $parsedContent = $this->parseContents($contents, $statusCode < 300);
-
         $this->validateResponse($statusCode, $parsedContent, $shouldHaveStatus);
 
         return $parsedContent;
@@ -69,15 +60,12 @@ final class DefaultClient implements Client
      */
     private function parseContents(string $content, bool $throwOnError): array
     {
-        try {
-            return json_decode($content, true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
-            if ($throwOnError) {
-                throw new BadRequestException([], 400, $exception, 'Cannot parse response data');
-            }
-
-            return [];
+        $result = json_decode($content, true);
+        if ($result === false && $throwOnError) {
+            throw new BadRequestException([], 400, null, 'Cannot parse response data');
         }
+
+        return $result ?: [];
     }
 
     private function getContents(StreamInterface $stream, bool $gzip): string
@@ -90,7 +78,7 @@ final class DefaultClient implements Client
             $inflateStream = new InflateStream($stream);
 
             return $inflateStream->getContents();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             $stream->rewind();
 
             return $stream->getContents();

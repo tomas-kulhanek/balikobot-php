@@ -9,6 +9,7 @@ use Inspirum\Balikobot\Exception\BadRequestException;
 use Inspirum\Balikobot\Model\ProofOfDelivery\DefaultProofOfDeliveryFactory;
 use Inspirum\Balikobot\Tests\Unit\BaseTestCase;
 use Throwable;
+use function get_class;
 
 final class DefaultProofOfDeliveryFactoryTest extends BaseTestCase
 {
@@ -19,10 +20,10 @@ final class DefaultProofOfDeliveryFactoryTest extends BaseTestCase
      *
      * @dataProvider providesTestCreate
      */
-    public function testCreate(array $carrierIds, array $data, array|Throwable $result): void
+    public function testCreate(array $carrierIds, array $data, $result): void
     {
         if ($result instanceof Throwable) {
-            $this->expectException($result::class);
+            $this->expectException(get_class($result));
             $this->expectExceptionMessage($result->getMessage());
         }
 

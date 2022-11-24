@@ -9,9 +9,11 @@ use function count;
 
 final class DefaultProofOfDeliveryFactory implements ProofOfDeliveryFactory
 {
-    public function __construct(
-        private Validator $validator,
-    ) {
+    private Validator $validator;
+
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 
     /** @inheritDoc */
