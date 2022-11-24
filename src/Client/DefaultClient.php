@@ -7,12 +7,14 @@ namespace Inspirum\Balikobot\Client;
 use GuzzleHttp\Psr7\InflateStream;
 use Inspirum\Balikobot\Client\Response\Validator;
 use Inspirum\Balikobot\Exception\BadRequestException;
+use JsonException;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
 use function json_decode;
 use function sprintf;
 use function str_replace;
 use function trim;
+use const JSON_THROW_ON_ERROR;
 
 final class DefaultClient implements Client
 {
@@ -60,12 +62,15 @@ final class DefaultClient implements Client
      */
     private function parseContents(string $content, bool $throwOnError): array
     {
-        $result = json_decode($content, true);
-        if ($result === false && $throwOnError) {
-            throw new BadRequestException([], 400, null, 'Cannot parse response data');
-        }
+        try {
+            return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            if ($throwOnError) {
+                throw new BadRequestException([], 400, $exception, 'Cannot parse response data');
+            }
 
-        return $result ?: [];
+            return [];
+        }
     }
 
     private function getContents(StreamInterface $stream, bool $gzip): string

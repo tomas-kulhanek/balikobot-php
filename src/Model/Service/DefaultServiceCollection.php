@@ -23,7 +23,7 @@ final class DefaultServiceCollection extends BaseCollection implements ServiceCo
         string $carrier,
         array $items = [],
         ?bool $parcel = null,
-        ?bool $cargo = null,
+        ?bool $cargo = null
     ) {
         $this->cargo   = $cargo;
         $this->parcel  = $parcel;

@@ -911,7 +911,7 @@ final class DefaultPackageServiceTest extends BaseServiceTestCase
         ?OrderedShipmentFactory $orderedShipmentFactory = null,
         ?LabelFactory $labelFactory = null,
         ?ProofOfDeliveryFactory $proofOfDeliveryFactory = null,
-        ?TransportCostFactory $transportCostFactory = null,
+        ?TransportCostFactory $transportCostFactory = null
     ): DefaultPackageService {
         return new DefaultPackageService(
             $client,

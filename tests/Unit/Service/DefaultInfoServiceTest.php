@@ -71,7 +71,7 @@ final class DefaultInfoServiceTest extends BaseServiceTestCase
     private function newDefaultInfoService(
         Client $client,
         ?AccountFactory $accountFactory = null,
-        ?ChangelogFactory $changelogFactory = null,
+        ?ChangelogFactory $changelogFactory = null
     ): DefaultInfoService {
         return new DefaultInfoService(
             $client,

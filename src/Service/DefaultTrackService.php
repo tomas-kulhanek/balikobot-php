@@ -34,11 +34,12 @@ final class DefaultTrackService implements TrackService
 
     public function trackPackageById(string $carrier, string $carrierId): Statuses
     {
-        if (!isset($this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId))) {
+        $status = $this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
+        if ($status === null) {
             throw new OutOfBoundsException();
         }
 
-        return $this->trackPackagesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
+        return $status;
     }
 
     public function trackPackages(PackageCollection $packages): StatusesCollection
@@ -61,11 +62,12 @@ final class DefaultTrackService implements TrackService
 
     public function trackPackageLastStatusById(string $carrier, string $carrierId): Status
     {
-        if (!isset($this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId))) {
+        $status = $this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
+        if ($status === null) {
             throw new OutOfBoundsException();
         }
 
-        return $this->trackPackagesLastStatusesByIds($carrier, [$carrierId])->getForCarrierId($carrierId);
+        return $status;
     }
 
     public function trackPackagesLastStatuses(PackageCollection $packages): StatusCollection

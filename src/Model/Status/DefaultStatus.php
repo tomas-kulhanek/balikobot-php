@@ -27,7 +27,7 @@ final class DefaultStatus extends BaseModel implements Status
         string $name,
         string $description,
         string $type,
-        ?DateTimeInterface $date,
+        ?DateTimeInterface $date
     ) {
         $this->date        = $date;
         $this->type        = $type;

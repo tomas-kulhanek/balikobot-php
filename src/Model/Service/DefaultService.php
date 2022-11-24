@@ -30,7 +30,7 @@ final class DefaultService extends BaseModel implements Service
         ?string $name,
         ?ServiceOptionCollection $options = null,
         ?array $countries = null,
-        ?array $codCountries = null,
+        ?array $codCountries = null
     ) {
         $this->codCountries = $codCountries;
         $this->countries    = $countries;

@@ -167,7 +167,7 @@ final class DefaultTrackServiceTest extends BaseServiceTestCase
 
     private function newDefaultTrackService(
         Client $client,
-        ?StatusFactory $statusFactory = null,
+        ?StatusFactory $statusFactory = null
     ): DefaultTrackService {
         return new DefaultTrackService(
             $client,

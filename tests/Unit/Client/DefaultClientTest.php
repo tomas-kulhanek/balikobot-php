@@ -32,7 +32,7 @@ final class DefaultClientTest extends BaseTestCase
         string $request,
         array $data,
         ?string $path,
-        string $url,
+        string $url
     ): void {
         $client = $this->newDefaultClient(200, [], [$url, $data]);
 
@@ -107,7 +107,7 @@ final class DefaultClientTest extends BaseTestCase
         $response,
         bool $shouldHaveStatus,
         $result,
-        bool $gzip = false,
+        bool $gzip = false
     ): void {
         if ($result instanceof Throwable) {
             $this->expectException(get_class($result));
